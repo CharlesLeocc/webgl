@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day3 - Buffer 与 Attribute 深入</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 520px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .guide {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #c9d4ef;
+    }
+
+    .guide li {
+      margin: 3px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- Day3 学习目标：
+    1) 一个顶点缓冲中同时存 position + color
+    2) 用两个 attribute 从同一缓冲按 stride/offset 读取
+    3) 理解 varying 在 VS -> FS 之间插值
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>Day3 目标：</strong>Buffer 与 Attribute 深入（位置 + 颜色）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：重点看 main.js 里 vertexAttribPointer 的参数。</p>
+    <ul class="guide">
+      <li>你会看到一个彩色渐变三角形</li>
+      <li>position 与 color 共用同一个顶点缓冲</li>
+      <li>可开启调试开关故意打乱 stride/offset，练习排错</li>
+    </ul>
+  </div>
+  <script src="./main.js"></script>
+</body>
+</html>

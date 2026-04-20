@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day1 - WebGL 完整渲染管线图</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #111a32;
+      --panel-soft: #0f1730;
+      --line: #2f4475;
+      --text: #e8eeff;
+      --muted: #aebee6;
+      --accent: #58a6ff;
+      --ok: #3fb950;
+      --warn: #d29922;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at 15% 8%, #1a2756 0%, var(--bg) 42%);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(17, 26, 50, 0.9);
+      padding: 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    .sub {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 4px 9px;
+      background: var(--panel-soft);
+    }
+
+    .flow-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0d1530;
+      padding: 10px;
+    }
+
+    svg {
+      width: 100%;
+      min-width: 1260px;
+      height: 620px;
+      display: block;
+    }
+
+    .node {
+      fill: var(--panel);
+      stroke: var(--line);
+      stroke-width: 1.4;
+      rx: 12;
+    }
+
+    .node.em {
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    .node.test {
+      stroke: var(--warn);
+      stroke-width: 1.8;
+    }
+
+    .title {
+      fill: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .txt {
+      fill: var(--muted);
+      font-size: 13px;
+    }
+
+    .code {
+      fill: #9cdcfe;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    .good {
+      fill: var(--ok);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .notes {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #0d1530;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .card strong {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>WebGL 完整渲染管线图（学习版）</h1>
+    <p class="sub">从 CPU(JS) 准备，到 GPU 顶点处理、光栅化、片元测试，再到帧缓冲显示。Day2 将首次走通 1~5 阶段的最小闭环。</p>
+
+    <div class="legend">
+      <span class="badge">左侧：CPU/JS 侧准备</span>
+      <span class="badge">中间：GPU 可编程阶段（Vertex / Fragment Shader）</span>
+      <span class="badge">右侧：固定功能阶段（组装/光栅化/测试/混合）</span>
+      <span class="badge">橙色框：容易出错的状态测试阶段</span>
+    </div>
+
+    <div class="flow-wrap">
+      <svg viewBox="0 0 1260 620" xmlns="http://www.w3.org/2000/svg" aria-label="webgl rendering pipeline">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#58a6ff"/>
+          </marker>
+        </defs>
+
+        <rect class="node em" x="24" y="30" width="250" height="130"/>
+        <text class="title" x="42" y="58">0) CPU / JS 准备阶段</text>
+        <text class="txt" x="42" y="82">创建 context、buffer、program</text>
+        <text class="code" x="42" y="104">createShader / linkProgram</text>
+        <text class="code" x="42" y="124">bufferData / drawArrays</text>
+        <text class="txt" x="42" y="144">设置状态：viewport、clearColor...</text>
+
+        <rect class="node em" x="320" y="30" width="250" height="130"/>
+        <text class="title" x="338" y="58">1) 顶点着色器 VS</text>
+        <text class="txt" x="338" y="82">按“每个顶点”执行</text>
+        <text class="code" x="338" y="104">attribute -> gl_Position</text>
+        <text class="txt" x="338" y="124">可输出 varying 传到片元阶段</text>
+        <text class="txt" x="338" y="144">常见：MVP 变换在这里完成</text>
+
+        <rect class="node" x="612" y="30" width="250" height="130"/>
+        <text class="title" x="630" y="58">2) 图元装配 + 裁剪</text>
+        <text class="txt" x="630" y="82">点/线/三角形组装</text>
+        <text class="txt" x="630" y="102">超出裁剪空间部分会被裁剪</text>
+        <text class="txt" x="630" y="122">背面剔除也影响可见结果</text>
+        <text class="code" x="630" y="144">TRIANGLES / LINES / POINTS</text>
+
+        <rect class="node" x="904" y="30" width="320" height="130"/>
+        <text class="title" x="922" y="58">3) 光栅化 Rasterization</text>
+        <text class="txt" x="922" y="82">几何图元 -> 片元（像素候选）</text>
+        <text class="txt" x="922" y="102">varying 在片元位置进行插值</text>
+        <text class="txt" x="922" y="122">此阶段后进入片元着色器</text>
+
+        <line x1="274" y1="95" x2="320" y2="95" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="570" y1="95" x2="612" y2="95" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="862" y1="95" x2="904" y2="95" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <rect class="node em" x="320" y="222" width="250" height="130"/>
+        <text class="title" x="338" y="250">4) 片元着色器 FS</text>
+        <text class="txt" x="338" y="274">按“每个片元”执行</text>
+        <text class="txt" x="338" y="294">采样纹理、计算光照、输出颜色</text>
+        <text class="code" x="338" y="316">gl_FragColor / out vec4</text>
+        <text class="txt" x="338" y="336">通常是性能热点阶段</text>
+
+        <rect class="node test" x="612" y="208" width="292" height="160"/>
+        <text class="title" x="630" y="236">5) 逐片元测试 + 混合</text>
+        <text class="txt" x="630" y="260">深度测试：遮挡关系是否通过</text>
+        <text class="txt" x="630" y="280">模板测试：可选掩码控制</text>
+        <text class="txt" x="630" y="300">混合：透明颜色与背景合成</text>
+        <text class="code" x="630" y="322">DEPTH_TEST / BLEND</text>
+        <text class="txt" x="630" y="344">错误高发：透明排序、Z-fighting</text>
+
+        <rect class="node em" x="944" y="222" width="280" height="130"/>
+        <text class="title" x="962" y="250">6) 帧缓冲输出</text>
+        <text class="txt" x="962" y="274">通过测试的片元写入 color buffer</text>
+        <text class="txt" x="962" y="294">浏览器把结果显示到 canvas</text>
+        <text class="good" x="962" y="322">你最终看到屏幕图像</text>
+
+        <line x1="445" y1="160" x2="445" y2="222" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="570" y1="287" x2="612" y2="287" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="904" y1="287" x2="944" y2="287" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <rect class="node" x="24" y="416" width="1200" height="168"/>
+        <text class="title" x="42" y="446">对应你当前学习阶段（Day1 -> Day2）</text>
+        <text class="txt" x="42" y="474">Day1 已完成：context + viewport + clearColor + clear（渲染准备）。</text>
+        <text class="txt" x="42" y="496">Day2 将新增：顶点/片元 shader、顶点数据上传、drawArrays，首次让 3D 数据真正通过管线变成像素。</text>
+        <text class="txt" x="42" y="518">定位问题思路：看不到图形通常先查 shader 编译、顶点坐标范围、viewport、draw 调用；透明错误先查 depth/blend 配置。</text>
+        <text class="code" x="42" y="546">流程记忆：CPU 准备 -> VS -> 装配/裁剪 -> 光栅化 -> FS -> 测试/混合 -> Framebuffer</text>
+      </svg>
+    </div>
+
+    <div class="notes">
+      <div class="card"><strong>性能关注：</strong>VS 复杂度近似跟顶点数相关，FS 复杂度近似跟屏幕覆盖像素相关；全屏后处理通常更吃 FS。</div>
+      <div class="card"><strong>WebGIS 关联：</strong>坐标转换问题多发生在 VS 前（数据准备与矩阵），遮挡和透明问题多发生在第 5 阶段（深度/混合）。</div>
+      <div class="card"><strong>建议：</strong>Day2 写三角形时保留 shader 编译日志输出；这会显著减少早期排错时间。</div>
+    </div>
+  </div>
+</body>
+</html>

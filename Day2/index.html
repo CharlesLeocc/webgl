@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day2 - 第一个三角形</title>
+  <style>
+    /* Day2 页面样式：保持简洁，重点让你观察渲染结果和状态提示 */
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 460px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .guide {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #c9d4ef;
+    }
+
+    .guide li {
+      margin: 3px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- 学习指引：
+    1) 打开页面，先确认状态显示“渲染成功”
+    2) 打开控制台，观察 shader 编译 / program 链接日志
+    3) 再去 main.js 改顶点坐标和颜色，验证自己对管线的理解
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <!-- 这块信息区用于承载“当前学习阶段 + 运行状态 + 调试提示” -->
+    <p><strong>Day2 目标：</strong>第一个三角形（Shader + Buffer + Draw）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：打开控制台查看 shader 编译和链接日志。</p>
+    <ul class="guide">
+      <li>步骤 1：确认页面是否出现三角形</li>
+      <li>步骤 2：若失败，先看控制台里的编译日志</li>
+      <li>步骤 3：练习改 <code>a_position</code> 和片元颜色</li>
+    </ul>
+  </div>
+  <!-- Day2 所有渲染逻辑集中在 main.js，便于你按管线顺序阅读 -->
+  <script src="./main.js"></script>
+</body>
+</html>

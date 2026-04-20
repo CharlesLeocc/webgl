@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day4 - Uniform 与动画</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 540px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .guide {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #c9d4ef;
+    }
+
+    .guide li {
+      margin: 3px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- Day4 学习目标：
+    1) 用 uniform 传入“每帧共享参数”u_time
+    2) 用 requestAnimationFrame 驱动连续渲染
+    3) 区分 attribute（逐顶点）与 uniform（逐 draw/逐帧）
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>Day4 目标：</strong>Uniform + requestAnimationFrame 动画</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：观察三角形颜色随时间变化，并查看控制台输出的 u_time。</p>
+    <ul class="guide">
+      <li>attribute：每个顶点各不相同（位置）</li>
+      <li>uniform：当前帧共享同一份值（时间）</li>
+      <li>先看动画，再读 main.js 注释理解每步</li>
+    </ul>
+  </div>
+  <script src="./main.js"></script>
+</body>
+</html>

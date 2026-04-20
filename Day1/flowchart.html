@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day1 渲染准备流程图</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2f;
+      --line: #2a3a63;
+      --text: #e7edff;
+      --muted: #aebde6;
+      --accent: #58a6ff;
+      --ok: #3fb950;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 10%, #1a2550 0%, var(--bg) 45%);
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      padding: 20px;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(18, 26, 47, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .desc {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .flow {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0e1529;
+      padding: 8px;
+    }
+
+    svg {
+      width: 100%;
+      min-width: 1050px;
+      height: 540px;
+      display: block;
+    }
+
+    .node {
+      fill: var(--panel);
+      stroke: var(--line);
+      stroke-width: 1.5;
+      rx: 10;
+    }
+
+    .node.accent {
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    .title {
+      font-size: 15px;
+      font-weight: 700;
+      fill: var(--text);
+    }
+
+    .text {
+      font-size: 13px;
+      fill: var(--muted);
+    }
+
+    .code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+      fill: #9cdcfe;
+    }
+
+    .result {
+      font-size: 13px;
+      fill: var(--ok);
+      font-weight: 700;
+    }
+
+    .tip {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      background: #0e1529;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Day1：WebGL 渲染准备流程图</h1>
+    <p class="desc">对应 <code>Day1/main.js</code> 中的核心 3 行：<code>viewport -> clearColor -> clear</code></p>
+
+    <div class="flow">
+      <svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" aria-label="WebGL render preparation flow">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#58a6ff"/>
+          </marker>
+        </defs>
+
+        <rect class="node accent" x="30" y="40" width="230" height="110"/>
+        <text class="title" x="45" y="70">1) JS 触发 render()</text>
+        <text class="text" x="45" y="95">浏览器每次 resize 或首次加载</text>
+        <text class="text" x="45" y="116">进入渲染准备阶段</text>
+
+        <rect class="node" x="300" y="40" width="250" height="120"/>
+        <text class="title" x="315" y="70">2) 设置视口 viewport</text>
+        <text class="code" x="315" y="96">gl.viewport(0, 0, width, height)</text>
+        <text class="text" x="315" y="118">定义 NDC 映射到画布像素区域</text>
+        <text class="text" x="315" y="138">决定“往哪里画”</text>
+
+        <rect class="node" x="590" y="40" width="240" height="120"/>
+        <text class="title" x="605" y="70">3) 设置清屏颜色状态</text>
+        <text class="code" x="605" y="96">gl.clearColor(r, g, b, a)</text>
+        <text class="text" x="605" y="118">仅设置 GPU 状态，不立即绘制</text>
+        <text class="text" x="605" y="138">决定“清成什么颜色”</text>
+
+        <rect class="node" x="870" y="40" width="200" height="120"/>
+        <text class="title" x="885" y="70">4) 执行清屏</text>
+        <text class="code" x="885" y="96">gl.clear(COLOR_BUFFER_BIT)</text>
+        <text class="text" x="885" y="118">把视口区域填充为清屏色</text>
+
+        <line x1="260" y1="95" x2="300" y2="95" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="550" y1="100" x2="590" y2="100" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="830" y1="100" x2="870" y2="100" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <rect class="node accent" x="180" y="240" width="730" height="210"/>
+        <text class="title" x="205" y="274">CPU (JavaScript) 与 GPU 分工</text>
+        <text class="text" x="205" y="304">CPU(JS)：调用 WebGL API，设置状态，提交命令（viewport / clearColor / clear）</text>
+        <text class="text" x="205" y="332">GPU：按照当前状态执行命令，修改帧缓冲区像素</text>
+        <text class="text" x="205" y="360">帧缓冲区：当前帧的颜色数据存放区，最终由浏览器显示到 canvas</text>
+        <text class="result" x="205" y="396">结果：你看到统一背景色，且没有上一帧残留像素</text>
+        <text class="text" x="205" y="424">后续 Day2 才会在这个背景上绘制三角形（drawArrays）</text>
+
+        <line x1="970" y1="160" x2="970" y2="220" stroke="#58a6ff" stroke-width="2"/>
+        <line x1="970" y1="220" x2="545" y2="220" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="545" y1="220" x2="545" y2="240" stroke="#58a6ff" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="tip">
+      使用方式：直接在浏览器打开本文件即可。建议你把它和 <code>Day1/main.js</code> 同时打开，对照代码理解每一步是“设状态”还是“执行命令”。
+    </div>
+  </div>
+</body>
+</html>

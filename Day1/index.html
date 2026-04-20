@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day1 - WebGL 环境与最小认知</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #101214;
+      color: #e6edf3;
+    }
+
+    #app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 420px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <canvas id="glCanvas"></canvas>
+    <div class="panel">
+      <p><strong>Day1 目标：</strong>创建 canvas + webgl context + 清屏</p>
+      <p id="statusText">状态：初始化中...</p>
+      <p>提示：打开控制台查看尺寸和上下文日志。</p>
+    </div>
+  </div>
+
+  <script src="./main.js"></script>
+</body>
+</html>

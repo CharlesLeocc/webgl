@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebGL 第 1-2 周学习计划表</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1f2328;
+      --muted: #59636e;
+      --line: #d0d7de;
+      --primary: #0969da;
+      --done: #1a7f37;
+      --doing: #9a6700;
+      --todo: #6e7781;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --card: #161b22;
+        --text: #e6edf3;
+        --muted: #9da7b3;
+        --line: #30363d;
+        --primary: #58a6ff;
+        --done: #3fb950;
+        --doing: #d29922;
+        --todo: #8b949e;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 0 0 8px;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      align-items: center;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    input[type="date"],
+    select,
+    textarea {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 14px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--text);
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .stats {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 9px;
+      background: var(--card);
+      color: var(--muted);
+    }
+
+    .badge.done {
+      color: var(--done);
+      border-color: color-mix(in srgb, var(--done) 35%, var(--line));
+    }
+
+    .badge.doing {
+      color: var(--doing);
+      border-color: color-mix(in srgb, var(--doing) 35%, var(--line));
+    }
+
+    .badge.todo {
+      color: var(--todo);
+    }
+
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1220px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      padding: 10px 8px;
+      font-size: 13px;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: var(--card);
+      z-index: 1;
+      text-align: left;
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: color-mix(in srgb, var(--primary) 7%, transparent);
+    }
+
+    td.small {
+      white-space: nowrap;
+    }
+
+    td.notes {
+      min-width: 240px;
+    }
+
+    td.notes textarea {
+      width: 100%;
+      min-height: 58px;
+      resize: vertical;
+    }
+
+    .status-select {
+      min-width: 100px;
+    }
+
+    .status-todo {
+      color: var(--todo);
+    }
+
+    .status-doing {
+      color: var(--doing);
+      font-weight: 600;
+    }
+
+    .status-done {
+      color: var(--done);
+      font-weight: 700;
+    }
+
+    .footer-tip {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="header">
+      <h1>WebGL 第 1-2 周详细学习计划</h1>
+      <div class="sub">按 14 天执行。你可以设置开始日期，页面会自动生成每天日期；完成情况和备注会自动保存到浏览器本地。</div>
+      <div class="toolbar">
+        <label class="field">
+          开始日期
+          <input id="startDate" type="date">
+        </label>
+        <button id="resetStatusBtn" type="button">重置完成情况</button>
+        <button id="resetAllBtn" type="button">重置全部（含备注）</button>
+
+        <div class="stats">
+          <span id="progressText" class="badge">进度：0 / 14</span>
+          <span id="todoCount" class="badge todo">未开始：0</span>
+          <span id="doingCount" class="badge doing">进行中：0</span>
+          <span id="doneCount" class="badge done">已完成：0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>周次</th>
+            <th>日期</th>
+            <th>学习主题</th>
+            <th>当天要完成的内容</th>
+            <th>验收标准</th>
+            <th>完成情况</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody id="planTableBody"></tbody>
+      </table>
+    </section>
+
+    <div class="footer-tip">建议每天投入 60-90 分钟：15 分钟概念学习 + 45-60 分钟编码 + 10-15 分钟复盘。</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "webgl-study-plan-week1-2-v1";
+    const STATUS = {
+      TODO: "未开始",
+      DOING: "进行中",
+      DONE: "已完成"
+    };
+
+    const PLAN = [
+      {
+        week: "第1周",
+        topic: "环境与最小认知",
+        tasks: "创建 canvas 与 webgl context；完成清屏；理解 JS 与 GPU 分工。",
+        check: "页面成功显示纯色背景；能口述初始化流程。"
+      },
+      {
+        week: "第1周",
+        topic: "第一个三角形",
+        tasks: "写顶点/片元 shader；完成编译、链接、useProgram；画出静态三角形。",
+        check: "独立跑通三角形；能定位并修复一次 shader 编译报错。"
+      },
+      {
+        week: "第1周",
+        topic: "Buffer 与 Attribute",
+        tasks: "用 VBO 传顶点；配置 vertexAttribPointer；改坐标观察图形变化。",
+        check: "能解释 attribute 作用；能改出至少两种图形形态。"
+      },
+      {
+        week: "第1周",
+        topic: "Uniform 与动画",
+        tasks: "用 uniform 控制颜色；用 requestAnimationFrame 做颜色动画。",
+        check: "能说明 uniform 与 attribute 区别；动画稳定无明显闪烁。"
+      },
+      {
+        week: "第1周",
+        topic: "Varying 插值",
+        tasks: "三顶点设置不同颜色；片元阶段显示颜色渐变。",
+        check: "能解释 varying 插值原理；demo 可稳定复现。"
+      },
+      {
+        week: "第1周",
+        topic: "阶段整合 Demo",
+        tasks: "整合清屏、三角形、颜色渐变、动画开关；拆分 init/render 等函数。",
+        check: "代码结构清晰；能完整讲述一次 draw 数据流。"
+      },
+      {
+        week: "第1周",
+        topic: "复盘与盲写",
+        tasks: "不看资料重写最小三角形；记录本周 2 个薄弱点与改进策略。",
+        check: "盲写可成功出图；报错定位速度提升。"
+      },
+      {
+        week: "第2周",
+        topic: "坐标系与裁剪空间",
+        tasks: "理解 NDC；调整 viewport；验证超界顶点裁剪行为。",
+        check: "能解释 [-1,1] 可见范围；能实现分屏式 viewport 效果。"
+      },
+      {
+        week: "第2周",
+        topic: "图元与绘制模式",
+        tasks: "实践 POINTS/LINES/TRIANGLES；用三角形拼矩形。",
+        check: "能按场景选择图元模式；理解矩形常用两三角形表示。"
+      },
+      {
+        week: "第2周",
+        topic: "索引缓冲 EBO",
+        tasks: "使用 ELEMENT_ARRAY_BUFFER 与 drawElements；比较索引前后数据量。",
+        check: "清楚顶点复用价值；可切换非索引/索引绘制。"
+      },
+      {
+        week: "第2周",
+        topic: "交互驱动渲染",
+        tasks: "加鼠标/键盘事件；通过 uniform 把交互参数传入 shader。",
+        check: "渲染逻辑与交互逻辑分离；高频交互下仍流畅。"
+      },
+      {
+        week: "第2周",
+        topic: "2D 变换雏形",
+        tasks: "实现平移/旋转/缩放中的至少两种；对比不同变换顺序效果。",
+        check: "能解释顺序影响；参数可通过按键或滑块调整。"
+      },
+      {
+        week: "第2周",
+        topic: "第2周整合 Demo",
+        tasks: "整合多绘制模式、交互、索引缓冲、基础变换；拆分 gl-utils/shader/app。",
+        check: "功能完整；模块划分合理；错误日志可读。"
+      },
+      {
+        week: "第2周",
+        topic: "双周验收与复盘",
+        tasks: "90 分钟内完成三项盲写测试：可变色三角形 + 一个交互 + 一个索引图元。",
+        check: "可独立完成主要流程；形成知识地图并列出下阶段待补点。"
+      }
+    ];
+
+    function getTodayDateString() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function addDays(dateString, plus) {
+      const date = new Date(dateString + "T00:00:00");
+      date.setDate(date.getDate() + plus);
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatDateCN(dateString) {
+      const date = new Date(dateString + "T00:00:00");
+      const weekText = ["日", "一", "二", "三", "四", "五", "六"][date.getDay()];
+      return `${dateString} (周${weekText})`;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function buildRow(planItem, index, startDate, state) {
+      const dayNo = index + 1;
+      const record = state[String(dayNo)] || {};
+      const dateValue = addDays(startDate, index);
+      const status = record.status || STATUS.TODO;
+      const notes = record.notes || "";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="small">Day ${dayNo}</td>
+        <td class="small">${planItem.week}</td>
+        <td class="small">${formatDateCN(dateValue)}</td>
+        <td>${planItem.topic}</td>
+        <td>${planItem.tasks}</td>
+        <td>${planItem.check}</td>
+        <td class="small">
+          <select class="status-select" data-day="${dayNo}">
+            <option value="${STATUS.TODO}" ${status === STATUS.TODO ? "selected" : ""}>${STATUS.TODO}</option>
+            <option value="${STATUS.DOING}" ${status === STATUS.DOING ? "selected" : ""}>${STATUS.DOING}</option>
+            <option value="${STATUS.DONE}" ${status === STATUS.DONE ? "selected" : ""}>${STATUS.DONE}</option>
+          </select>
+        </td>
+        <td class="notes">
+          <textarea data-note-day="${dayNo}" placeholder="填写今天遇到的问题、耗时、复盘结论...">${notes}</textarea>
+        </td>
+      `;
+      return tr;
+    }
+
+    function updateStats(state) {
+      const statuses = PLAN.map((_, i) => {
+        const rec = state[String(i + 1)] || {};
+        return rec.status || STATUS.TODO;
+      });
+
+      const done = statuses.filter((s) => s === STATUS.DONE).length;
+      const doing = statuses.filter((s) => s === STATUS.DOING).length;
+      const todo = statuses.filter((s) => s === STATUS.TODO).length;
+
+      document.getElementById("progressText").textContent = `进度：${done} / ${PLAN.length}`;
+      document.getElementById("todoCount").textContent = `未开始：${todo}`;
+      document.getElementById("doingCount").textContent = `进行中：${doing}`;
+      document.getElementById("doneCount").textContent = `已完成：${done}`;
+
+      document.querySelectorAll(".status-select").forEach((el) => {
+        el.classList.remove("status-todo", "status-doing", "status-done");
+        if (el.value === STATUS.TODO) el.classList.add("status-todo");
+        if (el.value === STATUS.DOING) el.classList.add("status-doing");
+        if (el.value === STATUS.DONE) el.classList.add("status-done");
+      });
+    }
+
+    function render() {
+      const state = loadState();
+      const startDateInput = document.getElementById("startDate");
+      if (!state.meta) state.meta = {};
+      if (!state.meta.startDate) state.meta.startDate = getTodayDateString();
+      startDateInput.value = state.meta.startDate;
+
+      const tbody = document.getElementById("planTableBody");
+      tbody.innerHTML = "";
+      PLAN.forEach((planItem, index) => {
+        tbody.appendChild(buildRow(planItem, index, state.meta.startDate, state));
+      });
+      saveState(state);
+      bindEvents();
+      updateStats(state);
+    }
+
+    function bindEvents() {
+      const state = loadState();
+
+      document.querySelectorAll(".status-select").forEach((select) => {
+        select.addEventListener("change", (event) => {
+          const day = event.target.getAttribute("data-day");
+          if (!state[day]) state[day] = {};
+          state[day].status = event.target.value;
+          saveState(state);
+          updateStats(state);
+        });
+      });
+
+      document.querySelectorAll("textarea[data-note-day]").forEach((textarea) => {
+        textarea.addEventListener("input", (event) => {
+          const day = event.target.getAttribute("data-note-day");
+          if (!state[day]) state[day] = {};
+          state[day].notes = event.target.value;
+          saveState(state);
+        });
+      });
+    }
+
+    document.getElementById("startDate").addEventListener("change", (event) => {
+      const state = loadState();
+      if (!state.meta) state.meta = {};
+      state.meta.startDate = event.target.value || getTodayDateString();
+      saveState(state);
+      render();
+    });
+
+    document.getElementById("resetStatusBtn").addEventListener("click", () => {
+      const ok = confirm("确认将 14 天任务的完成情况全部重置为“未开始”吗？备注会保留。");
+      if (!ok) return;
+      const state = loadState();
+      for (let i = 1; i <= PLAN.length; i += 1) {
+        if (!state[String(i)]) state[String(i)] = {};
+        state[String(i)].status = STATUS.TODO;
+      }
+      saveState(state);
+      render();
+    });
+
+    document.getElementById("resetAllBtn").addEventListener("click", () => {
+      const ok = confirm("确认重置全部数据吗？这会清空开始日期、完成情况和备注。");
+      if (!ok) return;
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
