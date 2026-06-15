@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day5 - Varying 与插值</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 540px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .guide {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #c9d4ef;
+    }
+
+    .guide li {
+      margin: 3px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- Day5 学习目标：
+    1) 理解 varying 在 VS -> FS 之间的「自动插值」原理（重心坐标）
+    2) 左侧渐变三角形：顶点颜色经 varying 插值，三角形内部平滑过渡
+    3) 右侧棋盘格：给每个顶点一个 UV 坐标，UV 经插值后在片元着色器里算出黑白格
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>Day5 目标：</strong>Varying 与插值（渐变三角形 + 棋盘格图案）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：观察左侧三角形的颜色过渡，与右侧棋盘格是如何由 UV 插值算出来的。</p>
+    <ul class="guide">
+      <li>左侧：三个顶点分别红/绿/蓝，内部颜色是 GPU 自动插值（重心坐标）的结果</li>
+      <li>右侧：每个顶点带一个 UV(0~1)，片元着色器用插值后的 UV 算棋盘格</li>
+      <li>可在 main.js 里调 GRID_COUNT 改变格子数量，体会「UV → 图案」的关系</li>
+    </ul>
+  </div>
+  <script src="./main.js"></script>
+</body>
+</html>
