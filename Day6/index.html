@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day6-7 - 整合与盲写</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 560px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .guide {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #c9d4ef;
+    }
+
+    .guide li {
+      margin: 3px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- Day6-7 学习目标：第 1 周收尾「整合与盲写」
+    1) 模块化拆分：样板代码抽到 gl-utils.js（ES Module）
+    2) 整合：把 Day3 交错缓冲 + Day4 uniform 动画 + Day5 varying 插值 合成彩色动画三角形
+    3) 盲写：对照 盲写清单与薄弱点记录.md 脱稿重写一遍
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>Day6-7 目标：</strong>整合与盲写（彩色动画三角形）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：观察三角形颜色随时间流动、轻微呼吸缩放。</p>
+    <ul class="guide">
+      <li>样板（createShader/createProgram/resize）已抽到 gl-utils.js 模块</li>
+      <li>整合了交错缓冲(Day3) + varying 插值(Day5) + uniform 动画(Day4)</li>
+      <li>配合「盲写清单与薄弱点记录.md」脱稿默写一遍，巩固第 1 周</li>
+    </ul>
+  </div>
+  <!-- main.js 使用 import，必须用 type="module" 并通过 http(s) 打开 -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
