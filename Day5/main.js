@@ -67,11 +67,11 @@ uniform float u_grid;
 
 void main() {
   // 把 0~1 的 uv 放大成网格坐标，floor 后取奇偶决定黑白。
-  vec2 cell = floor(v_uv * u_grid);
-  float checker = mod(cell.x + cell.y, 2.0);
+  vec2 cell = floor(v_uv * u_grid); // ① 放大并向下取整 → 第几行第几列
+  float checker = mod(cell.x + cell.y, 2.0); // ② 行列号之和的奇偶 → 0 或 1
   vec3 colorA = vec3(0.10, 0.12, 0.18); // 深色格
   vec3 colorB = vec3(0.85, 0.88, 0.95); // 浅色格
-  vec3 color = mix(colorA, colorB, checker);
+  vec3 color = mix(colorA, colorB, checker); // ③ 0 选深色，1 选浅色
   gl_FragColor = vec4(color, 1.0);
 }
 `;
@@ -209,6 +209,22 @@ function initAndRender() {
       gl.bindBuffer(gl.ARRAY_BUFFER, triangleBuffer);
       // stride = 5 个 float = 20 字节
       gl.enableVertexAttribArray(triPosLoc);
+      // vertexAttribPointer(index, size, type, normalized, stride, offset)
+      // 参数	这里的值	含义
+      // index	triPosLoc	要配置哪个 attribute（a_position 在 shader 里的位置编号）
+      // size	2	每个顶点取 2 个分量 → 因为位置是 vec2(x, y)
+      // type	gl.FLOAT	每个分量是 32 位浮点数（4 字节）
+      // normalized	false	是否把整数归一化到 0~1；浮点数填 false
+      // stride	FSIZE * 5	步长：相邻两个顶点之间隔多少字节
+      // offset	0	偏移：从每个顶点的第几个字节开始读
+      // 左侧三角形的缓冲是交错存放的，每个顶点 5 个 float —— [x, y, r, g, b]：
+      // 内存(字节):  0   4   8   12  16 | 20  24  28  32  36 | 40 ...
+      // 内容:        x   y   r   g   b  | x   y   r   g   b  | ...
+      //             └──── 顶点0 ────┘   └──── 顶点1 ────┘
+      // FSIZE = data.BYTES_PER_ELEMENT = 4（一个 float 占 4 字节）。
+      // stride = FSIZE * 5 = 20 字节 → 一个完整顶点的总长度（5 个 float）。意思是「每读完一个顶点，往后跳 20 字节找下一个顶点」。
+      // offset = 0 → 位置 x,y 在每个顶点的最前面，从第 0 字节开始读。
+      // 所以这行翻译成人话：「a_position 从第 0 字节开始，每次读 2 个 float，读完往后跳 20 字节读下一个顶点」。
       gl.vertexAttribPointer(triPosLoc, 2, gl.FLOAT, false, FSIZE * 5, 0);
       gl.enableVertexAttribArray(triColorLoc);
       gl.vertexAttribPointer(triColorLoc, 3, gl.FLOAT, false, FSIZE * 5, FSIZE * 2);
