@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2周 Day1 - NDC 坐标与裁剪 / scissor 测试</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 560px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .guide {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #c9d4ef;
+    }
+
+    .guide li {
+      margin: 3px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- 第2周 Day1 学习目标：NDC 坐标与裁剪 / scissor 测试
+    1) 同一个 -1~1 的 NDC 三角形，用 gl.viewport 映射到四个子区域（分屏）
+    2) gl.scissor + SCISSOR_TEST：把清屏/绘制限制在指定像素矩形内
+    3) 体会 viewport/scissor 的原点在「左下角」
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>第2周 Day1 目标：</strong>NDC 坐标与裁剪 / scissor 测试（分屏渲染 Demo）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：四个三角形其实是同一组顶点坐标。</p>
+    <ul class="guide">
+      <li>四宫格里的三角形顶点坐标完全相同，分屏只靠 gl.viewport 映射</li>
+      <li>每个分屏的背景色由 gl.scissor 限定区域后单独 clear</li>
+      <li>注意：viewport/scissor 的原点在画布「左下角」，y 向上</li>
+    </ul>
+  </div>
+  <!-- main.js 使用 import（复用 ../Day6/gl-utils.js），需 type="module" + http 打开 -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
