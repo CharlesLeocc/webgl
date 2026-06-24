@@ -11,7 +11,7 @@ import {
   createProgram,
   resizeCanvasToDisplay,
   createBufferWithData
-} from "./gl-utils.js";
+} from "../../shared/gl-utils.js";
 
 const canvas = document.getElementById("glCanvas");
 const statusText = document.getElementById("statusText");
