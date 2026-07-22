@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2周 Day6-7 - 阶段整合项目</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 680px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- 第2周 Day6-7 学习目标：阶段整合
+    把本周学到的内容全部串起来：
+    - NDC / viewport
+    - 7 种图元中的 TRIANGLES / LINES / POINTS / LINE_LOOP
+    - EBO 索引缓冲与顶点复用
+    - 鼠标 / 键盘交互
+    - 2D 变换矩阵与层级组合
+
+    场景：一个玩家控制的“母舰”方块 + 一颗围绕母舰公转的“卫星”三角形 + NDC 坐标网格。
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>第2周 Day6-7 目标：</strong>阶段整合（EBO + 多图元 + 交互 + 矩阵层级）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：移动鼠标控制母舰；W/A/S/D 平移，Q/E 自转，+/- 缩放；↑/↓ 调整卫星速度；1/2/3 切换卫星图元；空格复位。</p>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
