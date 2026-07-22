@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2周 Day5 - 2D 变换矩阵</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 620px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-family: "Cascadia Code", "Consolas", "Fira Code", monospace;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- 第2周 Day5 学习目标：2D 变换矩阵
+    在顶点着色器中用 mat3 矩阵把 a_position 变换到屏幕：
+      gl_Position = u_matrix * vec3(a_position, 1.0)
+    JS 端实现平移/旋转/缩放矩阵，并演示 T * R * S 连乘。
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>第2周 Day5 目标：</strong>2D 变换矩阵（平移 / 旋转 / 缩放 / 矩阵连乘）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：W/A/S/D 平移，Q/E 旋转，+/- 缩放，空格复位。</p>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
