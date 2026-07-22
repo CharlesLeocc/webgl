@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2周 Day4 - 鼠标与键盘交互</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    #glCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 620px;
+    }
+
+    .panel p {
+      margin: 4px 0;
+    }
+
+    .ok {
+      color: #3fb950;
+    }
+
+    .err {
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <!-- 第2周 Day4 学习目标：鼠标与键盘交互
+    1. 屏幕(clientX, clientY) → WebGL像素 → NDC 的转换（重点在 y 轴翻转）。
+    2. 用 uniform 把交互状态传进顶点着色器：u_offset（位移）、u_scale（缩放）。
+    3. 事件驱动渲染：不用 requestAnimationFrame，只在鼠标/键盘/窗口事件时重绘。
+  -->
+  <canvas id="glCanvas"></canvas>
+  <div class="panel">
+    <p><strong>第2周 Day4 目标：</strong>鼠标与键盘交互（屏幕坐标 → NDC / 事件驱动重绘）</p>
+    <p id="statusText">状态：初始化中...</p>
+    <p id="tipText">提示：移动鼠标控制三角形位置；按 ↑/↓ 缩放，按 R/G/B 改颜色，按空格复位。</p>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
