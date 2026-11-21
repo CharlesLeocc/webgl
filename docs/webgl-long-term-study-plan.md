@@ -8,6 +8,46 @@
 
 ---
 
+## 仓库目录与学习入口
+
+同一个仓库保留两条学习路线：`WeekN/DayN/` 按本长期计划记录基础练习；季度目标按主题组织实验和验收记录。已有练习从季度计划链接过去，不搬迁，也不复制。
+
+```text
+webgl/
+|-- Week1/                           # existing
+|-- Week2/                           # existing
+|-- Week3/                           # existing
+|-- shared/
+|   `-- gl-utils.js                  # existing WebGL helpers
+|-- docs/
+|   |-- webgl-basic-concepts.md       # existing
+|   |-- webgl-long-term-study-plan.md # existing
+|   |-- webgl-study-plan.html         # existing
+|   `-- quarterly/
+|       |-- README.md               # active quarter and archive entry
+|       `-- <YYYYQn>/                 # one directory per quarter, e.g. 2026Q4/
+|           |-- plan.md              # goals, weekly tasks, and acceptance
+|           |-- progress.md          # progress and experiment links
+|           |-- reviews/             # weekly reviews
+|           `-- benchmarks/          # performance reports
+`-- projects/                        # add with the first quarterly experiment
+    |-- webgl-lab/                   # HTML + JavaScript + WebGL
+    |   |-- experiments/<topic>/     # index.html + main.js per experiment
+    |   `-- scene/                   # native version of the comparison scene
+    `-- threejs-lab/                 # HTML + JavaScript + Three.js
+        |-- experiments/<topic>/     # index.html + main.js per experiment
+        `-- scene/                   # Three.js version of the comparison scene
+```
+
+- **周练习**：沿用现有 `WeekN/DayN/`。例如 [Week2/Day5 的 2D 变换矩阵](../Week2/Day5/index.html) 已覆盖的内容，季度计划直接引用；需要对照两种 3D 矩阵乘法顺序时，再新增 `projects/webgl-lab/experiments/matrix-order/`。
+- **原生 WebGL 实验**：保留独立的 HTML 入口，通过静态 HTTP 服务从仓库根目录运行；可复用 [`shared/gl-utils.js`](../shared/gl-utils.js)，但要练习的矩阵运算和着色器留在实验里，不藏进公共工具。
+- **Three.js 实验**：到该阶段再建实验目录。和原生 WebGL 一样，每个实验用独立的 HTML 和 JS，通过静态 HTTP 服务运行。Three.js 作为渲染库，以浏览器 ES Module 方式直接加载并固定版本，不引入 Vite、Vue 或 npm 构建。成果 Demo 可作为静态文件部署到 GitHub Pages。
+- **季度记录**：从[季度索引](quarterly/README.md)找到对应季度。各季度在 `docs/quarterly/<YYYYQn>/` 下独立归档：`plan.md` 记录目标、每周任务和验收标准；`progress.md` 只记录状态和链接；`benchmarks/` 保存测试条件与前后结果。新季度、新的 GitHub Pages 成果路径均使用新的季度编号，不覆盖上一季度的材料或链接。
+
+先建立季度计划，再随第一项新实验新增对应目录；不预先创建空目录。两个 `scene/` 分别实现同一小场景，尽量沿用相同几何体、相机和场景参数，用于对照原生 WebGL 与 Three.js 的实现。
+
+---
+
 ## 学习路径总览
 
 ```
