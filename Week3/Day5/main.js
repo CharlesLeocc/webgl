@@ -62,7 +62,7 @@ const fsSource = `
   void main() {
     vec2 uv = v_uv;
     vec2 p = (uv - 0.5) * vec2(u_aspect, 1.0); // 宽高比修正后的中心坐标
-    vec3 col;
+    vec3 col = vec3(0.0);
 
     if (u_mode == 1) {
       // 光晕：亮度 = 参数 / 距离，距离越近越亮，自然衰减出光晕
