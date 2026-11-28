@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Right hand / Cross product in 3D</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #eaf1f4;
+      --muted: #a6bac4;
+      --edge: #3a5161;
+      --first: #62ddac;
+      --second: #ffc16f;
+      --result: #68d7ff;
+      background: radial-gradient(ellipse at top right, #254252, #121e2a 60%, #101921);
+      color: var(--ink);
+      font: 16px/1.5 Georgia, "Microsoft YaHei", serif;
+      min-height: 100%;
+    }
+    body { margin: 0; }
+    main { max-width: 64rem; margin: auto; padding: clamp(1rem, 4vw, 3rem); }
+    header p { color: var(--muted); margin: .3rem 0; }
+    h1 { font-size: clamp(2rem, 6vw, 4rem); line-height: 1; margin: .35rem 0 .8rem; }
+    .kicker { letter-spacing: .16em; text-transform: uppercase; font: .78rem monospace; }
+    .stage { margin: 1.25rem 0 0; border: 1px solid var(--edge); background: #142330; }
+    canvas { display: block; width: 100%; aspect-ratio: 16 / 9; cursor: grab; touch-action: none; }
+    canvas:active { cursor: grabbing; }
+    .legend, .buttons { display: flex; flex-wrap: wrap; gap: .55rem 1.1rem; }
+    .legend { padding: .65rem 1rem; margin: 0; border-top: 1px solid var(--edge); font: .86rem/1.5 monospace; }
+    #first-label { color: var(--first); }
+    #second-label { color: var(--second); }
+    #result-label { color: var(--result); }
+    fieldset { margin: 0; padding: 1rem; border: 1px solid var(--edge); border-top: 0; min-width: 0; }
+    button, select { border: 1px solid var(--edge); background: #1b303e; color: var(--ink); padding: .4rem .65rem; font: inherit; }
+    .scrub { display: flex; align-items: center; gap: .7rem; margin-top: .65rem; }
+    input { flex: 1; min-width: 0; accent-color: var(--result); }
+    a { color: var(--result); }
+    #status { color: var(--muted); margin: .55rem 0; }
+    @media (max-width: 38rem) { canvas { aspect-ratio: 1; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Week 02 / Vector laboratory</p>
+      <h1>The right-hand rule in 3D</h1>
+      <p>Watch the four fingers curl from the first arrow toward the second. The cyan arrow follows the thumb.</p>
+    </header>
+    <figure class="stage">
+      <canvas id="hand" width="960" height="540" aria-label="Interactive animated 3D right hand"></canvas>
+      <figcaption class="legend">
+        <span id="first-label">First: AB (+X)</span>
+        <span id="second-label">Second: AC (+Y)</span>
+        <span id="result-label">Thumb: +Z</span>
+      </figcaption>
+    </figure>
+    <fieldset id="controls" disabled aria-label="Animation and camera">
+      <div class="buttons">
+        <label>Order
+          <select id="order">
+            <option value="abc">AB &times; AC</option>
+            <option value="acb">AC &times; AB</option>
+          </select>
+        </label>
+        <button id="play" type="button">Pause</button>
+        <button id="oblique" type="button">Side view</button>
+        <button id="front" type="button">Front view</button>
+      </div>
+      <label class="scrub" for="curl">Finger curl <input id="curl" type="range" min="0" max="100" value="0"></label>
+    </fieldset>
+    <p id="status" role="status">Starting WebGL...</p>
+    <a href="./index.html">Back to the lighting experiment</a>
+  </main>
+  <script type="module" src="./right-hand-3d.js"></script>
+</body>
+</html>

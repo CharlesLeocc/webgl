@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Week 2 | Dot and cross products</title>
+  <style>
+    body { max-width: 42rem; margin: 2rem auto; padding: 0 1rem; }
+    canvas { display: block; max-width: 100%; height: auto; }
+    details img { display: block; max-width: 100%; height: auto; }
+    fieldset { max-width: 28rem; }
+    input[type="range"] { width: 100%; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Dot and cross products</h1>
+    <p>Move the light angle to change the shading. Swap B and C to reverse the normal without moving the triangle.</p>
+    <fieldset id="controls" disabled>
+      <legend>Experiment controls</legend>
+      <label for="angle">Light angle from +Z: <output id="degrees" for="angle">0</output>&deg;</label>
+      <input id="angle" type="range" min="0" max="180" value="0">
+      <label><input id="flip" type="checkbox"> Swap B and C</label>
+    </fieldset>
+    <p id="status" role="status">Starting WebGL...</p>
+    <canvas id="canvas" width="480" height="320"></canvas>
+    <dl>
+      <dt>Face normal N</dt><dd id="normal"></dd>
+      <dt>Direction toward light L</dt><dd id="light"></dd>
+      <dt>Dot product N &middot; L</dt><dd id="dot"></dd>
+      <dt>Diffuse factor max(N &middot; L, 0)</dt><dd id="diffuse"></dd>
+    </dl>
+    <p><a href="./right-hand-3d.html">Open the interactive 3D right-hand model</a></p>
+    <details>
+      <summary>Watch the right-hand rule (animated GIF)</summary>
+      <p>Green is the first vector; brown is the second. The dot means the thumb points toward you, and the cross means it points away.</p>
+      <a href="./right-hand-rule.gif">
+        <img src="./right-hand-rule.gif" width="864" height="428" loading="lazy" alt="Right-hand fingers curl from right to up with the thumb pointing out, and from up to right with the thumb pointing in.">
+      </a>
+    </details>
+  </main>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
